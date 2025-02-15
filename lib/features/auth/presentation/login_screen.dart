@@ -1,10 +1,14 @@
+import 'package:ecommerce/core/errors/auth_exeption.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/widgets/custom_text_field.dart';
+import '../../../core/widgets/custom_button.dart';
 import '../data/auth_provider.dart';
 
+
 class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
@@ -14,18 +18,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   String errorMessage = '';
+  bool isLoading = false;
 
   Future<void> _login() async {
+    setState(() => isLoading = true);
     try {
-      await ref.read(authRepositoryProvider).login(
+      await ref.read(authRepositoryProvider).signIn(
             emailController.text.trim(),
             passwordController.text.trim(),
           );
-      context.go('/products');
+      context.go('/productlist');
     } catch (e) {
       setState(() {
-        errorMessage = e.toString();
+        errorMessage = e is AuthException ? e.message : 'Login failed';
       });
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
@@ -36,29 +44,43 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
+            CustomTextField(
               controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+              label: 'Email',
+              icon: Icons.email,
             ),
-            TextField(
+            const SizedBox(height: 12),
+            CustomTextField(
               controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
+              label: 'Password',
+              isPassword: true,
+              icon: Icons.lock,
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
+            const SizedBox(height: 16),
+            CustomButton(
+              text: 'Login',
+              isLoading: isLoading,
               onPressed: _login,
-              child: const Text('Login'),
             ),
-            InkWell(onTap: (){context.go('/signup');},
-              child: Text('signup')),
+            if (errorMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  errorMessage,
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             TextButton(
               onPressed: () => context.push('/forgot-password'),
               child: const Text('Forgot Password?'),
             ),
-            if (errorMessage.isNotEmpty) 
-              Text(errorMessage, style: const TextStyle(color: Colors.red)),
+            TextButton(
+              onPressed: () => context.push('/signup'),
+              child: const Text('Don\'t have an account? Sign up'),
+            ),
           ],
         ),
       ),

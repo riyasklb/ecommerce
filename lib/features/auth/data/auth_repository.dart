@@ -2,42 +2,61 @@ import 'package:ecommerce/core/errors/auth_exeption.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
-class AuthRepository {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+abstract class AuthRepository {
+  User? get currentUser;
+  Future<void> signIn(String email, String password);
+  Future<void> signUp(String email, String password);
+  Future<void> signOut();
+  Future<void> sendPasswordReset(String email);
+}
 
-  Future<User?> signUp(String email, String password) async {
+class FirebaseAuthRepository implements AuthRepository {
+  final FirebaseAuth _firebaseAuth;
+
+  FirebaseAuthRepository(this._firebaseAuth);
+
+  @override
+  User? get currentUser => _firebaseAuth.currentUser;
+
+  @override
+  Future<void> signIn(String email, String password) async {
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      throw AuthException(AuthException.handleFirebaseAuthError(e.code));
+      throw AuthException.fromCode(e.code);
     }
   }
 
-  Future<User?> login(String email, String password) async {
+  @override
+  Future<void> signUp(String email, String password) async {
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      throw AuthException(AuthException.handleFirebaseAuthError(e.code));
+      throw AuthException.fromCode(e.code);
     }
   }
 
-  Future<void> forgotPassword(String email) async {
+  @override
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<void> sendPasswordReset(String email) async {
     try {
-      await _auth.sendPasswordResetEmail(email: email);
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      throw AuthException(AuthException.handleFirebaseAuthError(e.code));
+      throw AuthException.fromCode(e.code);
     }
   }
 
-  Future<void> logout() async {
-    await _auth.signOut();
+    Future<void> logout() async {
+    await _firebaseAuth.signOut();
   }
 }

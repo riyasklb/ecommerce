@@ -1,28 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/widgets/custom_text_field.dart';
+import '../../../core/widgets/custom_button.dart';
 import '../data/auth_provider.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
-  const ForgotPasswordScreen({super.key});
+  const ForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final emailController = TextEditingController();
   String message = '';
+  bool isLoading = false;
 
   Future<void> _resetPassword() async {
+    setState(() => isLoading = true);
     try {
-      await ref.read(authRepositoryProvider).forgotPassword(emailController.text.trim());
+      await ref
+          .read(authRepositoryProvider)
+          .sendPasswordReset(emailController.text.trim());
       setState(() {
-        message = 'Password reset link sent!';
+        message = 'Password reset email sent. Check your inbox!';
       });
     } catch (e) {
       setState(() {
-        message = e.toString();
+        message = 'Failed to send reset email.';
       });
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
@@ -33,18 +42,31 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
+            CustomTextField(
               controller: emailController,
-              decoration: const InputDecoration(labelText: 'Enter your email'),
+              label: 'Enter your email',
+              icon: Icons.email,
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
+            const SizedBox(height: 16),
+            CustomButton(
+              text: 'Send Reset Email',
+              isLoading: isLoading,
               onPressed: _resetPassword,
-              child: const Text('Send Reset Link'),
             ),
             if (message.isNotEmpty)
-              Text(message, style: const TextStyle(color: Colors.green)),
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  message,
+                  style: TextStyle(
+                    color: message.contains('failed') ? Colors.red : Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
           ],
         ),
       ),

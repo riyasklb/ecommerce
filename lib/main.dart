@@ -10,15 +10,17 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends ConsumerWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(appRouterProvider);
+
     return MaterialApp.router(
-      title: 'E-Commerce App',
+      title: 'My E-commerce App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      routerConfig: appRouter,
+      routerConfig: router,
     );
   }
 }

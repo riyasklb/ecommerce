@@ -41,6 +41,8 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_screenutil: ^5.9.3
   firebase_auth: ^5.4.2
+  shared_preferences: ^2.5.2
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
