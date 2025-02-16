@@ -12,18 +12,32 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => context.push('/productdetails', extra: product),
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildProductImage(product.image),
-              const SizedBox(width: 16.0),
-              Expanded(child: _buildProductDetails(product)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          padding: EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 5,
+                offset: Offset(0, 1),
+              ),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildProductImage(product.image),
+                const SizedBox(width: 16.0),
+                Expanded(child: _buildProductDetails(product)),
+              ],
+            ),
           ),
         ),
       ),
@@ -44,7 +58,7 @@ class ProductCard extends StatelessWidget {
                 imageUrl,
                 width: 112,
                 height: 112,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),
