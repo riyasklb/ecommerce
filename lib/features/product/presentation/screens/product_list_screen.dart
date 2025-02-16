@@ -1,8 +1,11 @@
+import 'package:ecommerce/features/auth/data/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/product_card.dart';
 import '../../data/product_provider.dart';
 import '../../model/product_model.dart';
+
 
 class ProductListScreen extends ConsumerStatefulWidget {
   const ProductListScreen({Key? key}) : super(key: key);
@@ -21,7 +24,18 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
     final products = ref.watch(productListProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Products')),
+      appBar: AppBar(
+        title: const Text('Products'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await ref.read(authRepositoryProvider).signOut();
+              if (mounted) context.go('/login');
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(

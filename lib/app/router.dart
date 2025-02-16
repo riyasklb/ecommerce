@@ -9,15 +9,13 @@ import '../../features/auth/presentation/forgot_password_screen.dart';
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/login',
-    redirect: (context, state) {
-      final token = ref.read(localStorageProvider).getToken();
-      if (token == null 
-     // || token.isEmpty
-      ) {
-        return '/login';
-      }
-      return '/productlist';
-    },
+    // redirect: (context, state) async {
+    //   final token = await ref.read(localStorageProvider).getToken();
+    //   if (token == null || (token.isNotEmpty == false)) {
+    //     return '/login';
+    //   }
+    //   return '/productlist';
+    // },
     routes: [
       GoRoute(
         path: '/login',

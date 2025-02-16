@@ -17,7 +17,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
 
-    return MaterialApp.router(
+    return MaterialApp.router(debugShowCheckedModeBanner: false,
       title: 'My E-commerce App',
       theme: ThemeData(primarySwatch: Colors.blue),
       routerConfig: router,
