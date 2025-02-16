@@ -1,7 +1,5 @@
-// features/products/presentation/widgets/product_card.dart
 import 'package:ecommerce/features/product/model/product_model.dart';
 import 'package:flutter/material.dart';
-
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductCard extends StatelessWidget {
@@ -22,8 +20,8 @@ class ProductCard extends StatelessWidget {
             height: 120,
             width: double.infinity,
             fit: BoxFit.cover,
-            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-            errorWidget: (context, url, error) => Icon(Icons.error),
+            placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -37,7 +35,7 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              "\$${product.price.toStringAsFixed(2)}",
+              "Price: \$${product.price.toStringAsFixed(2)}",
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
@@ -45,8 +43,16 @@ class ProductCard extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
             child: Row(
               children: [
-                Icon(Icons.star, color: Colors.amber, size: 16),
-                Text(product.rating.toString(), style: const TextStyle(fontSize: 14)),
+                const Icon(Icons.star, color: Colors.amber, size: 16),
+                Text(
+                  "${product.rating.rate.toStringAsFixed(1)} / 5.0",
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  "(${product.rating.count} reviews)",
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
               ],
             ),
           ),

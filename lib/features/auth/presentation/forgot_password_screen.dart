@@ -4,39 +4,34 @@ import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../data/auth_provider.dart';
 
-class ForgotPasswordScreen extends ConsumerStatefulWidget {
+final forgotPasswordMessageProvider = StateProvider<String>((ref) => '');
+final forgotPasswordLoadingProvider = StateProvider<bool>((ref) => false);
+
+class ForgotPasswordScreen extends ConsumerWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ForgotPasswordScreen> createState() =>
-      _ForgotPasswordScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final emailController = TextEditingController();
+    final message = ref.watch(forgotPasswordMessageProvider);
+    final isLoading = ref.watch(forgotPasswordLoadingProvider);
 
-class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
-  final emailController = TextEditingController();
-  String message = '';
-  bool isLoading = false;
-
-  Future<void> _resetPassword() async {
-    setState(() => isLoading = true);
-    try {
-      await ref
-          .read(authRepositoryProvider)
-          .sendPasswordReset(emailController.text.trim());
-      setState(() {
-        message = 'Password reset email sent. Check your inbox!';
-      });
-    } catch (e) {
-      setState(() {
-        message = 'Failed to send reset email.';
-      });
-    } finally {
-      setState(() => isLoading = false);
+    Future<void> resetPassword() async {
+      ref.read(forgotPasswordLoadingProvider.notifier).state = true;
+      try {
+        await ref.read(authRepositoryProvider).sendPasswordReset(
+          emailController.text.trim(),
+        );
+        ref.read(forgotPasswordMessageProvider.notifier).state =
+            'Password reset email sent. Check your inbox!';
+      } catch (_) {
+        ref.read(forgotPasswordMessageProvider.notifier).state =
+            'Failed to send reset email.';
+      } finally {
+        ref.read(forgotPasswordLoadingProvider.notifier).state = false;
+      }
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Forgot Password')),
       body: Padding(
@@ -53,7 +48,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             CustomButton(
               text: 'Send Reset Email',
               isLoading: isLoading,
-              onPressed: _resetPassword,
+              onPressed: resetPassword,
             ),
             if (message.isNotEmpty)
               Padding(

@@ -1,20 +1,23 @@
 import 'package:ecommerce/core/storage/local_storage.dart';
 import 'package:ecommerce/features/product/presentation/screens/product_list_screen.dart';
-
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/signup_screen.dart';
 import '../../features/auth/presentation/forgot_password_screen.dart';
 
-
-
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    // ignore: unnecessary_null_comparison
-    initialLocation: ref.read(localStorageProvider).getToken() != null
-        ? '/productlist'
-        : '/login',
+    initialLocation: '/login',
+    redirect: (context, state) {
+      final token = ref.read(localStorageProvider).getToken();
+      if (token == null 
+     // || token.isEmpty
+      ) {
+        return '/login';
+      }
+      return '/productlist';
+    },
     routes: [
       GoRoute(
         path: '/login',

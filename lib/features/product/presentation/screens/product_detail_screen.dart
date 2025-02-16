@@ -41,6 +41,12 @@ class ProductDetailScreen extends StatelessWidget {
                 color: Colors.green,
                 fontWeight: FontWeight.bold,
               ),
+            ),Text(
+              "discription ${product.description}",
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 16),
             Text(
