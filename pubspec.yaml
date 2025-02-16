@@ -39,7 +39,6 @@ dependencies:
   go_router: ^14.8.0
   dio: ^5.8.0+1
   google_fonts: ^6.2.1
-  flutter_screenutil: ^5.9.3
   firebase_auth: ^5.4.2
   shared_preferences: ^2.5.2
   cached_network_image: ^3.4.1

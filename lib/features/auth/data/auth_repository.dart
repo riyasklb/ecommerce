@@ -16,6 +16,7 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<UserCredential> signIn(String email, String password) async {
     try {
+      
       return await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       throw AuthException(e.message ?? 'Login failed');
