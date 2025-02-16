@@ -147,6 +147,7 @@ class ProductDetailScreen extends StatelessWidget {
                       horizontal: 80, vertical: 18), // Adjust padding
                 ),
                 onPressed: () {
+                  
                   // Handle add to cart action
                 },
                 child: Text(

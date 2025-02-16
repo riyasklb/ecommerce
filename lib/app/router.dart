@@ -1,4 +1,5 @@
 
+import 'package:ecommerce/features/cart/presentation/cart_screen.dart';
 import 'package:ecommerce/features/product/model/product_model.dart';
 import 'package:ecommerce/features/product/presentation/screens/product_detail_screen.dart';
 import 'package:ecommerce/features/product/presentation/screens/product_list_screen.dart';
@@ -44,6 +45,15 @@ GoRoute(
   },
 ),
 
+
+
+GoRoute(
+  path: '/cartscreen',
+  builder: (context, state) {
+    final product = state.extra as ProductModel;
+    return CartScreen(product: product);
+  },
+),
     ],
   );
 });
