@@ -134,7 +134,7 @@ class CartScreen extends ConsumerWidget {
                 padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
-                backgroundColor: Colors.greenAccent.shade700,
+                backgroundColor: Color(0xFFB08888),
               ),
               child: Center(
                 child: Text(

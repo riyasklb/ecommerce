@@ -29,7 +29,7 @@ Future<void> signIn(String email, String password, BuildContext context) async {
   state = AuthState(isLoading: true);
   try {
     await ref.read(authRepositoryProvider).signIn(email, password);
-    print('✅ Login successful');
+    print('-----------------------------------✅ Login successful------------------------------------------');
 
     navigateAfterLogin(); // 🔹 Safe Navigation Function
 
