@@ -93,17 +93,14 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
 
                   return filteredProducts.isEmpty
                       ? const Center(child: Text('No Products Available'))
-                      : GridView.builder(
-                          padding: const EdgeInsets.all(8),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.75,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                          ),
-                          itemCount: filteredProducts.length,
-                          itemBuilder: (context, index) => ProductCard(product: filteredProducts[index]),
-                        );
+                      : ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: filteredProducts.length,
+              itemBuilder: (context, index) {
+                final product = filteredProducts[index];
+                return ProductCard(product: product);
+              },
+            );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => Center(child: Text('Error: ${error.toString()}')),
