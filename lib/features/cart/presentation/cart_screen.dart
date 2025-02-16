@@ -1,6 +1,8 @@
+import 'package:ecommerce/core/assets/images.dart';
 import 'package:ecommerce/features/cart/data/cart_statenotifer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CartScreen extends ConsumerWidget {
   @override
@@ -8,20 +10,40 @@ class CartScreen extends ConsumerWidget {
     final cartItems = ref.watch(cartProvider);
     final cartNotifier = ref.read(cartProvider.notifier);
 
-    return Scaffold(
+    return Scaffold(backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Shopping Cart',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
         ),
         centerTitle: true,
         elevation: 0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: cartItems.isEmpty
           ? Center(
-              child: Text(
-                'Your cart is empty',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+              AppImages.     emptycartimage, // Add an empty cart image in assets
+                    height: 180,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Your cart is empty',
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                ],
               ),
             )
           : ListView.builder(
@@ -31,9 +53,10 @@ class CartScreen extends ConsumerWidget {
                 final item = cartItems[index];
                 return Card(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                   margin: EdgeInsets.symmetric(vertical: 10),
-                  elevation: 4,
+                  elevation: 6,
                   child: Padding(
                     padding: EdgeInsets.all(12),
                     child: Row(
@@ -43,8 +66,8 @@ class CartScreen extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
                             item.product.image,
-                            height: 90,
-                            width: 90,
+                            height: 100,
+                            width: 100,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -55,21 +78,29 @@ class CartScreen extends ConsumerWidget {
                             children: [
                               Text(
                                 item.product.title,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               SizedBox(height: 5),
                               Text(
                                 '₹${item.product.price} x ${item.quantity}',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black54,
+                                ),
                               ),
                               SizedBox(height: 10),
                               Row(
                                 children: [
                                   IconButton(
                                     icon: Icon(Icons.remove_circle,
-                                        color: Colors.redAccent),
+                                        color: Colors.grey),
                                     onPressed: () {
                                       if (item.quantity > 1) {
                                         cartNotifier.updateQuantity(
@@ -82,13 +113,14 @@ class CartScreen extends ConsumerWidget {
                                   ),
                                   Text(
                                     '${item.quantity}',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.add_circle,
-                                        color: Colors.greenAccent.shade700),
+                                        color: Colors.grey),
                                     onPressed: () {
                                       cartNotifier.updateQuantity(
                                           item.product, item.quantity + 1);
@@ -113,7 +145,7 @@ class CartScreen extends ConsumerWidget {
               topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.grey.withOpacity(0.15),
               blurRadius: 10,
               spreadRadius: 5,
             ),
@@ -124,8 +156,11 @@ class CartScreen extends ConsumerWidget {
           children: [
             Text(
               'Total: ₹${cartNotifier.totalPrice}',
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+              style: GoogleFonts.poppins(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
             SizedBox(height: 12),
             ElevatedButton(
@@ -139,8 +174,11 @@ class CartScreen extends ConsumerWidget {
               child: Center(
                 child: Text(
                   'Proceed to Checkout',
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             )

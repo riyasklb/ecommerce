@@ -1,3 +1,4 @@
+import 'package:ecommerce/core/assets/images.dart';
 import 'package:ecommerce/features/auth/application/auth_controller.dart';
 
 import 'package:ecommerce/features/product/data/search_product_provider.dart';
@@ -56,16 +57,18 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
                 fontSize: 18, fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
-              onPressed: () { context.push(
-                    '/cartscreen',
+              onPressed: () {
+                context.push(
+                  '/cartscreen',
                   //  extra: product,
-                  );},
-              icon: Image.asset('assets/images/shopping-cart.png')),
+                );
+              },
+              icon: Image.asset(AppImages.cartimage)),
           SizedBox(
             width: 10,
           ),
           IconButton(
-            icon: Image.asset('assets/images/logout.png', height: 30),
+            icon: Image.asset(AppImages.logouticon, height: 30),
             onPressed: () async {
               ref.read(authControllerProvider.notifier).logout(context);
             },

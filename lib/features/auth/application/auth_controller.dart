@@ -1,5 +1,6 @@
 import 'package:ecommerce/app/router.dart';
 import 'package:ecommerce/core/errors/auth_exeption.dart';
+import 'package:ecommerce/core/widget/custom_snacbar.dart';
 import 'package:ecommerce/features/auth/data/auth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +31,16 @@ Future<void> signIn(String email, String password, BuildContext context) async {
   try {
     await ref.read(authRepositoryProvider).signIn(email, password);
     print('-----------------------------------✅ Login successful------------------------------------------');
-
+ CustomSnackbar.show(context,
+                                    message: 'Login successful!',
+                                    isError: false);
     navigateAfterLogin(); // 🔹 Safe Navigation Function
 
   } catch (e) {
+    CustomSnackbar.show(context,
+                                    message:
+                                        'Please fix the errors and try again',
+                                    isError: true);
     state = AuthState(errorMessage: e is AuthException ? e.message : 'Login failed');
   } finally {
     state = AuthState(isLoading: false);
