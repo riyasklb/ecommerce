@@ -1,23 +1,25 @@
+import 'package:ecommerce/features/cart/data/cart_provider.dart';
+import 'package:ecommerce/features/cart/data/cart_statenotifer.dart';
 import 'package:ecommerce/features/product/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends ConsumerWidget { // Use ConsumerWidget
   final ProductModel product;
 
-  const ProductDetailScreen({Key? key, required this.product})
-      : super(key: key);
+  const ProductDetailScreen({Key? key, required this.product}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
               context.pop();
             },
@@ -35,7 +37,7 @@ class ProductDetailScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                      image: NetworkImage(product.image), // Load image from URL
+                      image: NetworkImage(product.image), 
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -46,9 +48,8 @@ class ProductDetailScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    product.title.split(' ').length > 3
-                        ? product.title.split(' ').sublist(0, 2).join(' ') +
-                            '...'
+                    product.title.length > 15
+                        ? '${product.title.substring(0, 12)}...'
                         : product.title,
                     style: GoogleFonts.montserrat(
                       fontSize: 28,
@@ -80,7 +81,7 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 17),
                   Text(
-                    '( ${product.rating.count} reviews )', // Show number of reviews
+                    '( ${product.rating.count} reviews )',
                     style: GoogleFonts.montserrat(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -98,7 +99,7 @@ class ProductDetailScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Row(children: [
                 _buildSizeOption("18 cm", false),
-                _buildSizeOption("20 cm", true), // Selected size
+                _buildSizeOption("20 cm", true),
                 _buildSizeOption("24 cm", false),
                 _buildSizeOption("30 cm", false),
               ]),
@@ -125,30 +126,34 @@ class ProductDetailScreen extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFF7F7F7), // light gray background
-                  borderRadius: BorderRadius.circular(10), // rounded corners
+                  color: const Color(0xFFF7F7F7),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.favorite_border,
+                  icon: const Icon(Icons.favorite_border,
                       color: Colors.black, size: 24),
                   onPressed: () {
                     // Handle favorite action
                   },
                 ),
               ),
-              SizedBox(width: 8), // Add spacing between the buttons
+              const SizedBox(width: 8),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFB08888), // Button color #B08888
+                  backgroundColor: const Color(0xFFB08888),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 80, vertical: 18), // Adjust padding
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 80, vertical: 18),
                 ),
                 onPressed: () {
-                  
-                  // Handle add to cart action
+                  ref.read(cartProvider.notifier).addToCart(product);
+
+                  context.push(
+                    '/cartscreen',
+                    extra: product,
+                  );
                 },
                 child: Text(
                   "Add to cart",
@@ -168,9 +173,9 @@ class ProductDetailScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xFFB08888) : Colors.grey.shade200,
+          color: isSelected ? const Color(0xFFB08888) : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
@@ -178,7 +183,7 @@ class ProductDetailScreen extends StatelessWidget {
           style: GoogleFonts.montserrat(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.white : Color(0x66000000),
+            color: isSelected ? Colors.white : const Color(0x66000000),
           ),
         ),
       ),

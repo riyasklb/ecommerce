@@ -1,4 +1,5 @@
 import 'package:ecommerce/features/auth/data/auth_provider.dart';
+import 'package:ecommerce/features/product/data/search_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +16,7 @@ class ProductListScreen extends ConsumerStatefulWidget {
 }
 
 class _ProductListScreenState extends ConsumerState<ProductListScreen> {
-  final searchQueryProvider = StateProvider<String>((ref) => '');
+
   final showFiltersProvider = StateProvider<bool>((ref) => false);
   String? selectedCategory;
   RangeValues priceRange = const RangeValues(0, 1000);
