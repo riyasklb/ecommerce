@@ -1,40 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/custom_button.dart';
-import '../data/auth_provider.dart';
+import '../application/auth_controller.dart'; // Use auth controller
 
+// 🔹 Providers
 final forgotPasswordMessageProvider = StateProvider<String>((ref) => '');
 final forgotPasswordLoadingProvider = StateProvider<bool>((ref) => false);
+final emailControllerProvider = Provider.autoDispose((ref) => TextEditingController());
 
 class ForgotPasswordScreen extends ConsumerWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final emailController = TextEditingController();
-    final message = ref.watch(forgotPasswordMessageProvider);
-    final isLoading = ref.watch(forgotPasswordLoadingProvider);
-
-    Future<void> resetPassword() async {
-      ref.read(forgotPasswordLoadingProvider.notifier).state = true;
-      try {
-        await ref.read(authRepositoryProvider).sendPasswordReset(
-          emailController.text.trim(),
-        );
-        ref.read(forgotPasswordMessageProvider.notifier).state =
-            'Password reset email sent. Check your inbox!';
-      } catch (_) {
-        ref.read(forgotPasswordMessageProvider.notifier).state =
-            'Failed to send reset email.';
-      } finally {
-        ref.read(forgotPasswordLoadingProvider.notifier).state = false;
-      }
-    }
+    final emailController = ref.watch(emailControllerProvider);
+    final authController = ref.watch(authControllerProvider.notifier);
+    final authState = ref.watch(authControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Forgot Password')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,21 +34,27 @@ class ForgotPasswordScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             CustomButton(
               text: 'Send Reset Email',
-              isLoading: isLoading,
-              onPressed: resetPassword,
+              isLoading: authState.isLoading,
+              onPressed: () async {
+                await authController.sendPasswordReset(emailController.text.trim());
+              },
             ),
-            if (message.isNotEmpty)
+            if (authState.errorMessage.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: Text(
-                  message,
+                  authState.errorMessage,
                   style: TextStyle(
-                    color: message.contains('failed') ? Colors.red : Colors.green,
+                    color: authState.errorMessage.contains('failed') ? Colors.red : Colors.green,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
+            TextButton(
+              onPressed: () => context.pop(), // Back to login
+              child: const Text('Back to Login'),
+            ),
           ],
         ),
       ),

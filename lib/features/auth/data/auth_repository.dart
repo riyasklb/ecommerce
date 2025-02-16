@@ -1,13 +1,11 @@
-import 'package:ecommerce/core/errors/auth_exeption.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:ecommerce/core/errors/auth_exeption.dart';
 
 abstract class AuthRepository {
-  User? get currentUser;
-  Future<void> signIn(String email, String password);
-  Future<void> signUp(String email, String password);
-  Future<void> signOut();
+  Future<UserCredential> signIn(String email, String password);
+  Future<UserCredential> signUp(String email, String password);
   Future<void> sendPasswordReset(String email);
+  Future<void> logout(); // ✅ Add logout method
 }
 
 class FirebaseAuthRepository implements AuthRepository {
@@ -16,35 +14,21 @@ class FirebaseAuthRepository implements AuthRepository {
   FirebaseAuthRepository(this._firebaseAuth);
 
   @override
-  User? get currentUser => _firebaseAuth.currentUser;
-
-  @override
-  Future<void> signIn(String email, String password) async {
+  Future<UserCredential> signIn(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      return await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      throw AuthException.fromCode(e.code);
+      throw AuthException(e.message ?? 'Login failed');
     }
   }
 
   @override
-  Future<void> signUp(String email, String password) async {
+  Future<UserCredential> signUp(String email, String password) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      return await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      throw AuthException.fromCode(e.code);
+      throw AuthException(e.message ?? 'Sign-up failed');
     }
-  }
-
-  @override
-  Future<void> signOut() async {
-    await _firebaseAuth.signOut();
   }
 
   @override
@@ -52,11 +36,12 @@ class FirebaseAuthRepository implements AuthRepository {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      throw AuthException.fromCode(e.code);
+      throw AuthException(e.message ?? 'Failed to send reset email.');
     }
   }
 
-    Future<void> logout() async {
-    await _firebaseAuth.signOut();
+  @override
+  Future<void> logout() async {
+    await _firebaseAuth.signOut(); // ✅ Firebase signOut method
   }
 }

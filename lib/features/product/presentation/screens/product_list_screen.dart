@@ -1,8 +1,9 @@
-import 'package:ecommerce/features/auth/data/auth_provider.dart';
+import 'package:ecommerce/features/auth/application/auth_controller.dart';
+
 import 'package:ecommerce/features/product/data/search_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/product_card.dart';
 import '../../data/product_provider.dart';
@@ -16,7 +17,6 @@ class ProductListScreen extends ConsumerStatefulWidget {
 }
 
 class _ProductListScreenState extends ConsumerState<ProductListScreen> {
-
   final showFiltersProvider = StateProvider<bool>((ref) => false);
   String? selectedCategory;
   RangeValues priceRange = const RangeValues(0, 1000);
@@ -48,7 +48,8 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
     );
   }
 
-  AppBar _buildAppBar() => AppBar(backgroundColor: Colors.white,
+  AppBar _buildAppBar() => AppBar(
+        backgroundColor: Colors.white,
         title: Text('All PRODUCTS',
             style: GoogleFonts.montserrat(
                 fontSize: 18, fontWeight: FontWeight.w600)),
@@ -56,8 +57,9 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
           IconButton(
             icon: Image.asset('assets/images/logout.png', height: 30),
             onPressed: () async {
-              await ref.read(authRepositoryProvider).signOut();
-              if (mounted) context.go('/login');
+          
+          
+             ref.read(authControllerProvider.notifier).logout(context);
             },
           ),
         ],
