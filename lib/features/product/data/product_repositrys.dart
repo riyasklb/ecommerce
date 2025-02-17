@@ -1,20 +1,20 @@
-// features/products/data/repositories/product_repository.dart
 import 'dart:convert';
+import 'package:ecommerce/core/uri/api_constants.dart';
 import 'package:ecommerce/features/product/model/product_model.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:ecommerce/core/utils/http_service.dart';
 
 class ProductRepository {
-  static const String apiUrl = 'https://fakestoreapi.com/products';
-
   Future<List<ProductModel>> fetchProducts() async {
-    final response = await http.get(Uri.parse(apiUrl));
+    final response = await HttpService.request(
+      url: ApiConstants.productsEndpoint,
+      method: 'GET',
+    );
 
-    if (response.statusCode == 200) {
+    if (response != null) {
       List jsonData = jsonDecode(response.body);
       return jsonData.map((e) => ProductModel.fromJson(e)).toList();
     } else {
-      throw Exception('Failed to load products');
+      throw Exception('Failed to fetch products');
     }
   }
 }

@@ -5,7 +5,7 @@ abstract class AuthRepository {
   Future<UserCredential> signIn(String email, String password);
   Future<UserCredential> signUp(String email, String password);
   Future<void> sendPasswordReset(String email);
-  Future<void> logout(); // ✅ Add logout method
+  Future<void> logout();
 }
 
 class FirebaseAuthRepository implements AuthRepository {
@@ -43,6 +43,6 @@ class FirebaseAuthRepository implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    await _firebaseAuth.signOut(); // ✅ Firebase signOut method
+    await _firebaseAuth.signOut(); 
   }
 }

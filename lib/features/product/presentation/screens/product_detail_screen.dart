@@ -1,4 +1,4 @@
-import 'package:ecommerce/features/cart/data/cart_provider.dart';
+
 import 'package:ecommerce/features/cart/data/cart_statenotifer.dart';
 import 'package:ecommerce/features/product/model/product_model.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductDetailScreen extends ConsumerWidget { // Use ConsumerWidget
+class ProductDetailScreen extends ConsumerWidget { 
   final ProductModel product;
 
   const ProductDetailScreen({Key? key, required this.product}) : super(key: key);

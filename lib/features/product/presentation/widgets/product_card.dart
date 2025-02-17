@@ -86,7 +86,7 @@ class ProductCard extends StatelessWidget {
                   size: 18.0,
                 ),
                 onPressed: () {
-                  // Handle favorite button press
+           
                 },
               ),
             ),

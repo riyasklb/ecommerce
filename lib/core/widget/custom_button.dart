@@ -16,15 +16,15 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 48, // Fixed height for consistent UI
+      height: 48, 
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: isLoading ? Colors.grey : Theme.of(context).primaryColor, // Disable color change
+          backgroundColor: isLoading ? Colors.grey : Theme.of(context).primaryColor, 
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        onPressed: isLoading ? null : onPressed, // Disable button while loading
+        onPressed: isLoading ? null : onPressed, 
         child: isLoading
             ? const SizedBox(
                 width: 24, 

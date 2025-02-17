@@ -1,7 +1,7 @@
 import 'package:ecommerce/core/assets/images.dart';
 import 'package:ecommerce/core/widget/custom_snacbar.dart';
-import 'package:ecommerce/core/widgets/custom_button.dart';
-import 'package:ecommerce/core/widgets/custom_text_field.dart';
+import 'package:ecommerce/core/widget/custom_button.dart';
+import 'package:ecommerce/core/widget/custom_text_field.dart';
 import 'package:ecommerce/features/auth/data/password_visibility_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -91,7 +91,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             hintText: 'Enter your password',
                             icon: Icons.lock,
                             isPassword:
-                                true, // Keep this property in your CustomTextField
+                                true, 
                             suffixIcon: IconButton(
                               icon: Icon(
                                 ref.watch(passwordVisibilityProvider)
@@ -105,7 +105,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               },
                             ),
                             obscureText: !ref.watch(
-                                passwordVisibilityProvider), // Toggle password visibility
+                                passwordVisibilityProvider), 
                             validator: (value) {
                               if (value == null || value.isEmpty)
                                 return 'Password is required';

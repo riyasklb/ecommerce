@@ -1,7 +1,7 @@
 import 'package:ecommerce/core/assets/images.dart';
 import 'package:ecommerce/core/widget/custom_snacbar.dart';
-import 'package:ecommerce/core/widgets/custom_button.dart';
-import 'package:ecommerce/core/widgets/custom_text_field.dart';
+import 'package:ecommerce/core/widget/custom_button.dart';
+import 'package:ecommerce/core/widget/custom_text_field.dart';
 import 'package:ecommerce/features/auth/data/password_visibility_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +19,7 @@ class SignupScreen extends ConsumerWidget {
     final emailController = ref.watch(emailControllerProvider);
     final passwordController = ref.watch(passwordControllerProvider);
 
-    final _formKey = GlobalKey<FormState>(); // Form key for validation
+    final _formKey = GlobalKey<FormState>(); 
 
     return Scaffold(backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Colors.white,
@@ -38,7 +38,7 @@ class SignupScreen extends ConsumerWidget {
             children: [
               const SizedBox(height: 20),
 
-              // 🖼️ Signup Image
+           
               Center(
                 child: Image.asset(
                 AppImages.   signupimage,
@@ -49,7 +49,7 @@ class SignupScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
 
-              // 📧 Email Field
+          
               CustomTextField(
                 controller: emailController,
                 label: 'Email',
@@ -72,7 +72,7 @@ class SignupScreen extends ConsumerWidget {
   label: 'Password',
   hintText: 'Enter your password',
   icon: Icons.lock,
-  obscureText: !ref.watch(passwordVisibilityProvider), // Dynamically update
+  obscureText: !ref.watch(passwordVisibilityProvider), 
   suffixIcon: IconButton(
     icon: Icon(
       ref.watch(passwordVisibilityProvider) ? Icons.visibility : Icons.visibility_off,
@@ -90,7 +90,7 @@ class SignupScreen extends ConsumerWidget {
 
               const SizedBox(height: 16),
 
-              // 🎯 Signup Button
+             
               CustomButton(
                 text: 'Create Account',
                 isLoading: authState.isLoading,
@@ -107,7 +107,7 @@ class SignupScreen extends ConsumerWidget {
                 },
               ),
 
-              // ⚠️ Error Message Display
+        
               if (authState.errorMessage.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -118,7 +118,7 @@ class SignupScreen extends ConsumerWidget {
                   ),
                 ),
 
-              // 🔄 Already Have an Account?
+            
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () => context.push('/login'),

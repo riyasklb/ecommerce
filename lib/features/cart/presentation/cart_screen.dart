@@ -15,7 +15,7 @@ class CartScreen extends ConsumerWidget {
         title: Text(
           'Shopping Cart',
           style: GoogleFonts.poppins(
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.w600,
             color: Colors.black87,
           ),
@@ -31,7 +31,7 @@ class CartScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-              AppImages.     emptycartimage, // Add an empty cart image in assets
+              AppImages.     emptycartimage,
                     height: 180,
                   ),
                   SizedBox(height: 20),
@@ -51,87 +51,98 @@ class CartScreen extends ConsumerWidget {
               itemCount: cartItems.length,
               itemBuilder: (context, index) {
                 final item = cartItems[index];
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  elevation: 6,
-                  child: Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            item.product.image,
-                            height: 100,
-                            width: 100,
-                            fit: BoxFit.cover,
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(   padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              boxShadow: [
+                                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              item.product.image,
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.product.title,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.product.title,
+                                  style: GoogleFonts.montserrat(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                '₹${item.product.price} x ${item.quantity}',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black54,
+                                SizedBox(height: 5),
+                                Text(
+                                  '₹${item.product.price} x ${item.quantity}',
+                                style: GoogleFonts.montserrat(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
                                 ),
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.remove_circle,
-                                        color: Colors.grey),
-                                    onPressed: () {
-                                      if (item.quantity > 1) {
-                                        cartNotifier.updateQuantity(
-                                            item.product, item.quantity - 1);
-                                      } else {
-                                        cartNotifier.removeFromCart(
-                                            item.product);
-                                      }
-                                    },
-                                  ),
-                                  Text(
-                                    '${item.quantity}',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.remove_circle,
+                                          color: Colors.grey),
+                                      onPressed: () {
+                                        if (item.quantity > 1) {
+                                          cartNotifier.updateQuantity(
+                                              item.product, item.quantity - 1);
+                                        } else {
+                                          cartNotifier.removeFromCart(
+                                              item.product);
+                                        }
+                                      },
                                     ),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.add_circle,
-                                        color: Colors.grey),
-                                    onPressed: () {
-                                      cartNotifier.updateQuantity(
-                                          item.product, item.quantity + 1);
-                                    },
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                                    Text(
+                                      '${item.quantity}',
+                                       style: GoogleFonts.montserrat(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.add_circle,
+                                          color: Colors.grey),
+                                      onPressed: () {
+                                        cartNotifier.updateQuantity(
+                                            item.product, item.quantity + 1);
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -155,13 +166,14 @@ class CartScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Total: ₹${cartNotifier.totalPrice}',
-              style: GoogleFonts.poppins(
-                fontSize: 19,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
+  'Total: \$${cartNotifier.totalPrice.toStringAsFixed(2)}',
+  style: GoogleFonts.montserrat(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  ),
+),
+
             SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {},
@@ -174,14 +186,14 @@ class CartScreen extends ConsumerWidget {
               child: Center(
                 child: Text(
                   'Proceed to Checkout',
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  style: GoogleFonts.montserrat(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
               ),
-            )
+            ), SizedBox(height: 8),
           ],
         ),
       ),

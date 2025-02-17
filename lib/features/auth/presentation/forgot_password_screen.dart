@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/widgets/custom_text_field.dart';
-import '../../../core/widgets/custom_button.dart';
-import '../../../core/widget/custom_snacbar.dart'; // Snackbar utility
+import '../../../core/widget/custom_text_field.dart';
+import '../../../core/widget/custom_button.dart';
+import '../../../core/widget/custom_snacbar.dart';
 import '../application/auth_controller.dart';
 
-// 🔹 Providers
+
 final emailControllerProvider = Provider.autoDispose((ref) => TextEditingController());
 
 class ForgotPasswordScreen extends ConsumerWidget {
@@ -20,7 +20,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
     final authController = ref.watch(authControllerProvider.notifier);
     final authState = ref.watch(authControllerProvider);
 
-    final _formKey = GlobalKey<FormState>(); // Form key for validation
+    final _formKey = GlobalKey<FormState>(); 
 
     return Scaffold(
       appBar: AppBar(
@@ -36,10 +36,10 @@ class ForgotPasswordScreen extends ConsumerWidget {
             children: [
               const SizedBox(height: 20),
 
-              // 🖼️ Forgot Password Image
+           
               Center(
                 child: Image.asset(
-            AppImages.      forgotpasswordimage, // Replace with your actual image
+            AppImages.      forgotpasswordimage, 
                   height: 350,
                   width: 350,
                   fit: BoxFit.contain,
@@ -47,7 +47,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
 
-              // 📧 Email Field
+           
               CustomTextField(
                 controller: emailController,
                 label: 'Enter your email',
@@ -64,7 +64,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
 
-              // ✉️ Send Reset Email Button
+              
               CustomButton(
                 text: 'Send Reset Email',
                 isLoading: authState.isLoading,
@@ -77,7 +77,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
                 },
               ),
 
-              // ⚠️ Error Message Display
+             
               if (authState.errorMessage.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -93,7 +93,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
 
               const SizedBox(height: 20),
 
-              // 🔄 Back to Login
+    
               TextButton(
                 onPressed: () => context.pop(),
                 child: const Text(

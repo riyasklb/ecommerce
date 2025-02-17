@@ -12,24 +12,24 @@ import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/signup_screen.dart';
 import '../../features/auth/presentation/forgot_password_screen.dart';
 
-// 📌 Define navigatorKey BEFORE using it
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-// 📌 Provider to check authentication from SharedPreferences
+
 final authStatusProvider = FutureProvider<bool>((ref) async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getBool('authenticated') ?? false; // Default: Not authenticated
+  return prefs.getBool('authenticated') ?? false; 
 });
 
-// 📌 App Router Provider
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authStatusAsync = ref.watch(authStatusProvider);
 
-  // 📌 Default to '/login' if auth state is still loading
+  
   final initialLocation = authStatusAsync.when(
     data: (isAuthenticated) => isAuthenticated ? '/productlist' : '/login',
-    loading: () => '/login', // Show login while checking
-    error: (_, __) => '/login', // Handle errors by defaulting to login
+    loading: () => '/login', 
+    error: (_, __) => '/login', 
   );
 
   return GoRouter(
@@ -67,9 +67,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-// 📌 Function to Navigate After Login Safely
+
 void navigateAfterLogin() {
   WidgetsBinding.instance.addPostFrameCallback((_) {
-    navigatorKey.currentState?.context.go('/productlist'); // ✅ Safe navigation
+    navigatorKey.currentState?.context.go('/productlist'); 
   });
 }

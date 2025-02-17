@@ -60,7 +60,7 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
               onPressed: () {
                 context.push(
                   '/cartscreen',
-                  //  extra: product,
+                
                 );
               },
               icon: Image.asset(AppImages.cartimage)),
