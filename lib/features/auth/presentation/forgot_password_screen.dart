@@ -68,13 +68,14 @@ class ForgotPasswordScreen extends ConsumerWidget {
               CustomButton(
                 text: 'Send Reset Email',
                 isLoading: authState.isLoading,
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    await authController.sendPasswordReset(emailController.text.trim());
-                  } else {
-                    CustomSnackbar.show(context, message: 'Please enter a valid email', isError: true);
-                  }
-                },
+             onPressed: () async {
+  if (_formKey.currentState!.validate()) {
+    await authController.sendPasswordReset(emailController.text.trim(), context);
+  } else {
+    CustomSnackbar.show(context, message: 'Please enter a valid email', isError: true);
+  }
+},
+
               ),
 
              

@@ -29,40 +29,66 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
 
-  Future<void> signIn(String email, String password, BuildContext context) async {
-    state = AuthState(isLoading: true);
-    try {
-      final userCredential = await ref.read(authRepositoryProvider).signIn(email, password);
-      state = AuthState(user: userCredential.user);
+Future<void> signIn(String email, String password, BuildContext context) async {
+  state = AuthState(isLoading: true);
+  try {
+    final userCredential = await ref.read(authRepositoryProvider).signIn(email, password);
+    state = AuthState(user: userCredential.user);
 
-      await _setAuthenticated(true); 
+    await _setAuthenticated(true);
 
-      CustomSnackbar.show(context, message: 'Login successful!', isError: false);
-      context.go('/productlist'); 
-    } catch (e) {
-      CustomSnackbar.show(context, message: 'Please fix the errors and try again', isError: true);
-      state = AuthState(errorMessage: e is AuthException ? e.message : 'Login failed');
-    } finally {
-      state = AuthState(isLoading: false, user: state.user);
+    CustomSnackbar.show(context, message: 'Login successful!', isError: false);
+    context.go('/productlist');
+  } catch (e) {
+    String errorMessage = 'Login failed. Please try again.';
+
+    if (e is AuthException) {
+      //errorMessage = e.message;
+    } else if (e is FirebaseAuthException) {
+      print('---------------------------');
+      errorMessage = AuthException.fromCode(e.code).message;
+    } else {
+      errorMessage = 'An unexpected error occurred. Please try again.';
     }
+
+    CustomSnackbar.show(context, message: errorMessage, isError: true);
+    state = AuthState(errorMessage: errorMessage);
+  } finally {
+    state = AuthState(isLoading: false, user: state.user);
   }
+}
+
+
 
   
-  Future<void> signUp(String email, String password, BuildContext context) async {
-    state = AuthState(isLoading: true);
-    try {
-      final userCredential = await ref.read(authRepositoryProvider).signUp(email, password);
-      state = AuthState(user: userCredential.user);
+Future<void> signUp(String email, String password, BuildContext context) async {
+  state = AuthState(isLoading: true);
+  try {
+    final userCredential = await ref.read(authRepositoryProvider).signUp(email, password);
+    state = AuthState(user: userCredential.user);
 
-      await _setAuthenticated(true); 
+    await _setAuthenticated(true);
 
-      context.go('/productlist'); 
-    } catch (e) {
-      state = AuthState(errorMessage: e is AuthException ? e.message : 'Sign-up failed');
-    } finally {
-      state = AuthState(isLoading: false, user: state.user);
+    CustomSnackbar.show(context, message: 'Sign-up successful!', isError: false);
+    context.go('/productlist');
+  } catch (e) {
+    String errorMessage = 'Sign-up failed. Please try again.';
+
+    if (e is AuthException) {
+      errorMessage = e.message; 
+    } else if (e is FirebaseAuthException) {
+      errorMessage = e.message ?? 'An authentication error occurred';
+    } else {
+      errorMessage = e.toString(); 
     }
+
+    CustomSnackbar.show(context, message: errorMessage, isError: true);
+    state = AuthState(errorMessage: errorMessage);
+  } finally {
+    state = AuthState(isLoading: false, user: state.user);
   }
+}
+
 
   Future<void> logout(BuildContext context) async {
     state = AuthState(isLoading: true);
@@ -78,21 +104,35 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
  
-  Future<void> sendPasswordReset(String email) async {
-    if (email.isEmpty) {
-      state = AuthState(errorMessage: 'Please enter your email.');
-      return;
-    }
-    state = AuthState(isLoading: true);
-    try {
-      await ref.read(authRepositoryProvider).sendPasswordReset(email);
-      state = AuthState(errorMessage: 'Password reset email sent. Check your inbox!');
-    } catch (e) {
-      state = AuthState(errorMessage: e is AuthException ? e.message : 'Failed to send reset email.');
-    } finally {
-      state = AuthState(isLoading: false);
-    }
+Future<void> sendPasswordReset(String email, BuildContext context) async {
+  if (email.isEmpty) {
+    CustomSnackbar.show(context, message: 'Please enter your email.', isError: true);
+    state = AuthState(errorMessage: 'Please enter your email.');
+    return;
   }
+
+  state = AuthState(isLoading: true);
+  try {
+    await ref.read(authRepositoryProvider).sendPasswordReset(email);
+    
+    CustomSnackbar.show(context, message: 'Password reset email sent. Check your inbox!', isError: false);
+    state = AuthState(errorMessage: 'Password reset email sent. Check your inbox!');
+  } catch (e) {
+    String errorMessage = 'Failed to send reset email.';
+    
+    if (e is AuthException) {
+      errorMessage = e.message;
+    } else if (e is FirebaseAuthException) {
+      errorMessage = AuthException.fromCode(e.code).message;
+    }
+
+    CustomSnackbar.show(context, message: errorMessage, isError: true);
+    state = AuthState(errorMessage: errorMessage);
+  } finally {
+    state = AuthState(isLoading: false);
+  }
+}
+
 }
 
 
