@@ -5,4 +5,5 @@ class AppImages {
   static const String emptycartimage=  'assets/images/empty-cart.png';
   static const String cartimage=  'assets/images/shopping-cart.png';
  static const String logouticon= 'assets/images/logout.png';
+ static const String nodataimage='assets/images/no-data.png';
 }

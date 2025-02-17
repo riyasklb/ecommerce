@@ -138,7 +138,7 @@ class ProductCard extends StatelessWidget {
             ),
             SizedBox(height: 4.0),
             Text(
-              '${product.price} \$',
+              '\$ ${product.price}',
               style: GoogleFonts.montserrat(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,

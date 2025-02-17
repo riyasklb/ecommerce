@@ -183,24 +183,44 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
         ],
       );
 
-  Widget _buildProductList(List<ProductModel> productList) {
-    final query = ref.watch(searchQueryProvider);
-    final filteredProducts = productList
-        .where((product) =>
-            (query.isEmpty || product.title.toLowerCase().contains(query)) &&
-            (selectedCategory == null ||
-                product.category.name == selectedCategory) &&
-            product.price >= priceRange.start &&
-            product.price <= priceRange.end)
-        .toList();
+Widget _buildProductList(List<ProductModel> productList) {
+  final query = ref.watch(searchQueryProvider);
+  final rangeValues = ref.watch(priceRangeProvider); // Get updated price range
 
-    return filteredProducts.isEmpty
-        ? const Center(child: Text('No Products Available'))
-        : ListView.builder(
-            padding: const EdgeInsets.all(12),
-            itemCount: filteredProducts.length,
-            itemBuilder: (context, index) =>
-                ProductCard(product: filteredProducts[index]),
-          );
-  }
+  final filteredProducts = productList
+      .where((product) =>
+          (query.isEmpty || product.title.toLowerCase().contains(query)) &&
+          (selectedCategory == null ||
+              product.category.name == selectedCategory) &&
+          product.price >= rangeValues.start && // Use updated range values
+          product.price <= rangeValues.end)
+      .toList();
+
+return filteredProducts.isEmpty
+    ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+         AppImages.   nodataimage, 
+            height: 200,
+            width: 200,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'No Products Available',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ],
+      )
+    : ListView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: filteredProducts.length,
+        itemBuilder: (context, index) =>
+            ProductCard(product: filteredProducts[index]),
+      );
+
+}
+
 }
